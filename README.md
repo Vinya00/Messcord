@@ -33,16 +33,28 @@ Ez a bot összeköt egy *Messenger csoportot* és egy *Discord csatornát*:
 2. Jobb klikk a kívánt csatornára - *Copy Channel ID*.
 3. Ezt kell a Replit Secrets-ben `DISCORD_CHANNEL_ID` néven megadni.
 
-# 4. Messenger adatok
-- *FB_EMAIL* - A Facebook fiókod e-mail címe.
-- *FB_PASSWORD* - A Facebook jelszó (ajánlott egy külön **App Password**, ha kétlépcsős bejelentkezést használsz).
-- *MESSENGER_THREAD_ID* - A csoport azonosítója.
-  - Ezt legegyszerűbben úgy találod meg, ha böngészőből megnyitod a Messenger beszélgetést.
-  - Az URL így néz ki:
-    ```
-    https://www.facebook.com/messages/t/1234567890123456
-    ```
-  - A szám a végén = `MESSENGER_THREAD_ID`.
+# 4. Messenger adatok (COOKIE-s bejelentkezés)
+A bot NEM email/jelszóval lép be, hanem a böngészőben tárolt Facebook cookie-kat használja.  
+Ehhez két értéket kell kimásolni a böngésződből:
+
+1. Nyisd meg a [Messenger](https://www.messenger.com/) oldalt, és lépj be a Facebook fiókoddal.
+2. Nyomj *F12*-t a fejlesztői eszközök megnyitásához.
+3. Menj az *Application (vagy Storage)* fülre - *Cookies* - `facebook.com`.
+4. Másold ki ezek értékét:
+   - `c_user`
+   - `xs`
+
+Ezeket kell majd Replit Secrets-ben beállítani:
+- `FB_COOKIE_CUSER` = a `c_user` cookie értéke
+- `FB_COOKIE_XS` = az `xs` cookie értéke
+
+Messenger csoport ID:
+1. Nyisd meg a csoport beszélgetést böngészőben.
+2. Az URL így néz ki:
+   ```
+   https://www.facebook.com/messages/t/1234567890123456
+   ```
+3. A szám a végén = `MESSENGER_THREAD_ID`.
 
 # 5. Replit Secrets beállítás
 Replit-en *Tools/Secrets* menüben add hozzá az alábbiakat:
@@ -50,8 +62,8 @@ Replit-en *Tools/Secrets* menüben add hozzá az alábbiakat:
 - `DISCORD_TOKEN` - A Discord bot *TOKEN*-je
 - `DISCORD_CHANNEL_ID` - A cél Discord csatorna *ID*-ja
 - `DISCORD_WEBHOOK_URL` - A Discord csatorna *Webhook URL*-je
-- `FB_EMAIL` - Messengerhez használt e-mail
-- `FB_PASSWORD` - Messenger jelszó
+- `FB_COOKIE_CUSER` - Messenger `c_user` cookie értéke
+- `FB_COOKIE_XS` - Messenger `xs` cookie értéke
 - `MESSENGER_THREAD_ID` - Messenger csoport *ID*-ja
 
 # 6. UptimeRobot beállítása (24/7 működéshez)
@@ -67,7 +79,7 @@ Replit-en *Tools/Secrets* menüben add hozzá az alábbiakat:
 # 7. Hibakeresés
 
 - *Bot nem indul* - Ellenőrizd a `requirements.txt` és `replit.nix` fájlokat.
-- *Messenger login hiba* - Nézd meg, kell-e „App Password”.
+- *Messenger login hiba* - Ellenőrizd, hogy a `c_user` és `xs` cookie értékei helyesek-e, és nem jártak le.
 - *Nem látja a csatornát* - Ellenőrizd a `DISCORD_CHANNEL_ID` értéket.
 - *Webhook nem működik* - Nézd meg, hogy a `DISCORD_WEBHOOK_URL` titkos változó jó-e.
 - *Videó konvertálás hiba* - Nézd a logot, ott az ffmpeg hibaüzenet.
